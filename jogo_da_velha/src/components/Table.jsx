@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getClick } from '../actions/action';
+import { getClick, reloader } from '../actions/action';
 import Cell from './Cell';
 
 class Table extends Component {
@@ -15,6 +15,7 @@ class Table extends Component {
     const { squares } = this.props;
     return (
       <Cell
+        auto={position}
         key={`${keys} `}
         value={squares[position]}
         onClick={() => this.handleClick(position)}
@@ -30,7 +31,7 @@ class Table extends Component {
     if (this.calculateWinner(squares) || squares[index]) return;
 
     square[index] = selected ? 'X' : 'O';
-    console.log('trocar a figura', square);
+
     functClicks({
       squares: square,
       selected: !selected,
@@ -64,8 +65,8 @@ class Table extends Component {
   }
 
   render() {
-    const { squares, selected } = this.props;
-
+    const { squares, selected, reload } = this.props;
+    
     const repeter = (value) => value.map((v, ind) => this.buiderCell(ind, ind));
     const winner = this.calculateWinner(squares);
     const status = (win) => {
@@ -74,14 +75,21 @@ class Table extends Component {
       } else if (!squares.includes(null)) {
         return 'Empate';
       } else {
-        return `Próximo Jogador:  ${selected ? 'X' : 'O'}`;
+        return `Próximo Jogador: ${selected ? 'X' : 'O'}`;
       }
     };
 
     return (
       <div>
-        <hi>{status(winner)}</hi>
-        <div className="tabuleiro">{repeter(squares)}</div>
+        <h3 data-testid="resultado">{status(winner)}</h3>
+        <div data-testid="tabuleiro" className="tabuleiro">
+          {repeter(squares)}
+        </div>
+        <br />
+        <br />
+        <button className="btn" data-testid="btn" onClick={reload}>
+          Recomeçar!
+        </button>
       </div>
     );
   }
@@ -94,6 +102,7 @@ const mapStateToProps = ({ reducer: { squares, selected } }) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   functClicks: (value) => dispatch(getClick(value)),
+  reload: () => dispatch(reloader()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Table);
