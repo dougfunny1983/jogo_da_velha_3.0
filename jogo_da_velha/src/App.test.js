@@ -4,7 +4,6 @@ import App from './App';
 
 import  * as actions from '../src/actions/action'
 
-
 describe('actions', () => {
   it('should create an action to add a todo', () => {
     const value = 'Finish docs'
@@ -14,4 +13,4 @@ describe('actions', () => {
     }
     expect(actions.getClick(value)).toEqual(expectedAction)
   })
-})
+});
