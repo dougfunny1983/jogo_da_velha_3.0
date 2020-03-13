@@ -65,10 +65,13 @@ class Table extends Component {
   }
 
   render() {
+    
     const { squares, selected, reload } = this.props;
     
     const repeter = (value) => value.map((v, ind) => this.buiderCell(ind, ind));
+
     const winner = this.calculateWinner(squares);
+
     const status = (win) => {
       if (win) {
         return `Vencedor: ${win}!!! S2`;
